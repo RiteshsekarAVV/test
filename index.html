@@ -56,47 +56,41 @@
     <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
-      
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
         // Your web app's Firebase configuration
         const firebaseConfig = {
-  apiKey: "AIzaSyCBaGZc8vsBsGbQwZBqx0h_b9gT6CHGHkY",
-  authDomain: "test-e3b7c.firebaseapp.com",
-  projectId: "test-e3b7c",
-  storageBucket: "test-e3b7c.appspot.com",
-  messagingSenderId: "318095400457",
-  appId: "1:318095400457:web:bcb7544a43ac1c3c79e2d8"
-};
-      
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-      
+            apiKey: "AIzaSyCBaGZc8vsBsGbQwZBqx0h_b9gT6CHGHkY",
+            authDomain: "test-e3b7c.firebaseapp.com",
+            projectId: "test-e3b7c",
+            storageBucket: "test-e3b7c.appspot.com",
+            messagingSenderId: "318095400457",
+            appId: "1:318095400457:web:bcb7544a43ac1c3c79e2d8"
+        };
 
-        // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        // Initialize Firebase and Firestore
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
         // Form submission
-        document.getElementById('dataForm').addEventListener('submit', function(e) {
+        document.getElementById('dataForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             // Get input values
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
 
-            // Save data to Firestore
-            db.collection("users").add({
-                name: name,
-                email: email
-            })
-            .then(() => {
+            try {
+                // Save data to Firestore
+                await addDoc(collection(db, "users"), {
+                    name: name,
+                    email: email
+                });
                 alert("Data saved successfully!");
                 document.getElementById('dataForm').reset();
-            })
-            .catch((error) => {
+            } catch (error) {
                 console.error("Error saving data: ", error);
-            });
+            }
         });
     </script>
 </body>
